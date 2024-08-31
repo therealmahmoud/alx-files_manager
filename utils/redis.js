@@ -16,7 +16,6 @@ class RedisClient {
       this.isClientConnected = false;
     });
     this.client.on('connect', () => {
-        console.log('Redis client connected susccessfully')
       this.isClientConnected = true;
     });
   }
@@ -35,9 +34,6 @@ class RedisClient {
    * @returns {String | Object}
    */
   async get(key) {
-    if (!this.isClientConnected) {
-        throw new Error('Redis client is not connected');
-    }
     return promisify(this.client.GET).bind(this.client)(key);
   }
 
@@ -49,9 +45,6 @@ class RedisClient {
    * @returns {Promise<void>}
    */
   async set(key, value, duration) {
-    if (!this.isClientConnected) {
-        throw new Error('Redis client is not connected');
-    }
     await promisify(this.client.SETEX)
       .bind(this.client)(key, duration, value);
   }
@@ -62,9 +55,6 @@ class RedisClient {
    * @returns {Promise<void>}
    */
   async del(key) {
-    if (!this.isClientConnected) {
-        throw new Error('Redis client is not connected');
-    }
     await promisify(this.client.DEL).bind(this.client)(key);
   }
 }
